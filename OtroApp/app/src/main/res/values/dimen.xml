@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="Text_size_normal">12sp</dimen>
+    <dimen name="Icon_text">11sp</dimen>
+    <dimen name="Text_size_head_1">14sp</dimen>
+
+    <dimen name="Ending_margin">20dp</dimen>
+    <dimen name="Ending_marginplus">40dp</dimen>
+    <dimen name="Layout_margin">10dp</dimen>
+
+    <dimen name="Padding_whole">5dp</dimen>
+</resources>
