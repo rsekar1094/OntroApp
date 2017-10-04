@@ -3,12 +3,13 @@ package com.example.rajrajas.otroapp.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.rajrajas.otroapp.Adapter.PostAdapter;
@@ -33,36 +34,47 @@ public class MainActivity extends AppCompatActivity
 
     private RecyclerView recyclerView;
     List<Post_Item> post_items;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
 
+    }
+
+    private void init()
+    {
         recyclerView=(RecyclerView) findViewById(R.id.item_list);
+        progressBar=(ProgressBar)  findViewById(R.id.progress_bar);
+
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
         post_items =new ArrayList<>();
 
         Call<JsonObject> call = apiService.getPostTitle("");
+        progressBar.setVisibility(View.VISIBLE);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
             {
                 int statusCode = response.code();
-
-                Gson gson = new Gson();
-                PostLists postLists= gson.fromJson(response.body().toString(), PostLists.class);
-                List<Post_Item> post_items=postLists.getPosts();
-
-                initRecycler(post_items);
-
+                progressBar.setVisibility(View.GONE);
+                if(statusCode== 200)
+                {
+                    Gson gson = new Gson();
+                    PostLists postLists = gson.fromJson(response.body().toString(), PostLists.class);
+                    List<Post_Item> post_items = postLists.getPosts();
+                    initRecycler(post_items);
+                }
 
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t)
             {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
 
             }
@@ -70,8 +82,8 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    }
 
+    }
     private void initRecycler(final List<Post_Item> post_items) {
 
         recyclerView.setHasFixedSize(true);
@@ -89,7 +101,6 @@ public class MainActivity extends AppCompatActivity
                 view.findViewById(R.id.my_savings_lay).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
 
                         Intent intent = new Intent(MainActivity.this, PostActivity.class);
 

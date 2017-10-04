@@ -12,6 +12,11 @@ import android.widget.TextView;
 
 import android.support.v7.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.rajrajas.otroapp.Model.PostLists;
 import com.example.rajrajas.otroapp.Model.Post_Item;
 
@@ -23,7 +28,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import static com.example.rajrajas.otroapp.R.id.progressBar;
+
 
 /**
  * Created by rajrajas on 10/3/2017.
@@ -40,7 +46,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
        ImageView image_view;
         ProgressBar progressBar;
 
-        public MyViewHolder(View view) {
+        private MyViewHolder(View view) {
             super(view);
 
             title = (TextView) view.findViewById(R.id.title);
@@ -77,30 +83,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
         Post_Item selectedItem = post_items.get(position);
         holder.title.setText(Html.fromHtml(selectedItem.getTitle()));
-
-        holder.progressBar.setVisibility(View.VISIBLE);
         try {
-            Picasso.with(context).load(selectedItem.getPost_thumbnail().getURL())
-                    .memoryPolicy(MemoryPolicy.NO_CACHE)
-                    .fit()
-                    .into(holder.image_view, new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
+            holder.progressBar.setVisibility(View.VISIBLE);
+        Glide.with(context).load(selectedItem.getPost_thumbnail().getURL())
+                .thumbnail(0.5f)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
 
-                            holder.progressBar.setVisibility(View.GONE);
-                        }
+                    }
 
-                        @Override
-                        public void onError() {
-                            holder.progressBar.setVisibility(View.GONE);
-
-                        }
-
-                    });
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(holder.image_view);
         } catch (Exception e) {
             holder.progressBar.setVisibility(View.GONE);
         }
-
 
     }
 

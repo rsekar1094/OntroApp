@@ -19,4 +19,16 @@
         <item name="android:typeface">monospace</item>
     </style>
 
+    <style name="CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="ExpandedAppBar" parent="@android:style/TextAppearance.Large">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
 </resources>

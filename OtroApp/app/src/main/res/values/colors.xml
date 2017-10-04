@@ -10,5 +10,7 @@
     <color name="textColor">#1a1a1a</color>
     <color name="textColor_blue">#1c9097</color>
     <color name="white">#ffffff</color>
+    <color name="grayLayColor">#ecf1f7</color>
+    <color name="RedBtn">#fb5454</color>
 
 </resources>
